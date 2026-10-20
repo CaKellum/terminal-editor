@@ -1,21 +1,36 @@
 CXX = clang++
-CXXFLAGS = -std=c++20 -Wall -Wextra -MMD -MP
 SRCDIR = src
 BUILDDIR = build
 BIN = app
 
+BASEFLAGS = -std=c++20 -MMD -MP
+
+ifeq ($(config),prod)
+CXXFLAGS = $(BASEFLAGS) -w -O3
+OBJDIR = $(BUILDDIR)/prod
+else
+CXXFLAGS = $(BASEFLAGS) -Wall -Wextra -g -O0
+OBJDIR = $(BUILDDIR)/debug
+endif
+
 SRC = $(shell find $(SRCDIR) -name '*.cpp')
-OBJ = $(patsubst $(SRCDIR)/%.cpp,$(BUILDDIR)/%.o,$(SRC))
+OBJ = $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRC))
 DEP = $(OBJ:.o=.d)
 
 .SILENT:
 
-build: $(BIN)
+build: build-debug
+
+build-debug:
+	$(MAKE) --no-print-directory $(BIN) config=debug
+
+build-prod:
+	$(MAKE) --no-print-directory $(BIN) config=prod
 
 $(BIN): $(OBJ)
 	$(CXX) $(CXXFLAGS) $(OBJ) -o $@
 
-$(BUILDDIR)/%.o: $(SRCDIR)/%.cpp
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
@@ -29,4 +44,4 @@ default: build
 
 -include $(DEP)
 
-.PHONY: default build run clean
+.PHONY: default build build-debug build-prod run clean

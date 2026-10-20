@@ -26,5 +26,6 @@ struct PositionData {
 };
 
 std::string repeat(std::string item, int repeats = 1);
-void _border_edges(int padding, int len, std::stringstream *ss);
 std::string border(std::string str, int padding = 1);
+std::string multiple_box_border(ContentAlignment alignment,
+                                std::initializer_list<std::string> strings);
