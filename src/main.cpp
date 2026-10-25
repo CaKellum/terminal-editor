@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-int main(int argc, char *argv[]) {
+int main(/*int argc, char *argv[]*/) {
   /*int padding = 10;
   if (argc > 1) {
     padding = atoi(argv[1]);
@@ -14,8 +14,27 @@ int main(int argc, char *argv[]) {
           << setBackgroundColor(GREEN) << "hello" << restoreStyling()
           << setStyling(BLINK) << " world" << restoreStyling();
 
-  cout << multiple_box_border(VERTICAL,
-                              {content.str(), content.str(), content.str()});
+  cout << multiple_box_border(
+              VERTICAL, {"HI", content.str(),
+                         "this is purposly long string to test normalization"})
+       << endl;
+
+  cout << multiple_box_border(
+              HORIZONTAL,
+              {"HI", content.str(),
+               "this is purposly long string to test normalization"})
+       << endl;
+  cout << multiple_box_border(
+              DIAGONAL_DOWN,
+              {"HI", content.str(),
+               "this is purposly long string to test normalization"})
+       << endl;
+
+  cout << multiple_box_border(
+              DIAGONAL_UP,
+              {"HI", content.str(),
+               "this is purposly long string to test normalization"})
+       << endl;
 
   return 0;
 }
