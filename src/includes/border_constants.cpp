@@ -123,9 +123,19 @@ void diagonal_down_border(stringstream *ss, initializer_list<string> *strings) {
 void diagonal_up_border(stringstream *ss, initializer_list<string> *strings) {
   uint len = strings->size();
   uint last_width = 0;
-  cumulative_length_of_n_strings(len - 1, strings);
+  uint initial_offset = cumulative_length_of_n_strings(len - 1, strings);
   for (uint i = (len - 1); i > 0; i--) {
+    bool is_first = (i == len - 1);
+    bool is_last = (i == 0);
     string s = strings->begin()[i];
+    *ss << repeat(" ", initial_offset) << (is_first ? top_left : middle_middle)
+        << repeat(bottom_top_line, (s.size() + 2))
+        << (is_first ? top_right : middle_middle) << endl;
+    *ss << repeat(" ", initial_offset) << left_right << " " << s << " "
+        << left_right << endl;
+    *ss << repeat(" ", initial_offset) << (is_last ? bot_left : middle_middle)
+        << repeat(bottom_top_line, (s.size() + 2)) << endl;
+    initial_offset = cumulative_length_of_n_strings(i, strings);
   }
 }
 
